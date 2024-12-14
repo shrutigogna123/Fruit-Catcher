@@ -1,0 +1,497 @@
+/*
+  Shruti Gogna
+  Starting date: Friday, January 7, 2022.
+  Due date: Monday, January 24, 2022.
+  Game 1 (fruit catcher)
+  Description: user moves basket left/right to catch 4 fruits (blue, red, orange, pink+green) and avoid 1 fruit (white). User starts with 3 lives and loses 1 life when a fruit touches the bottom or when user catches toxic fruit. Game ends if user has 0 lives left.
+*/
+//variables
+  //x (x-coordinate), y (y-coordinate), r (radius), s (speed)
+  //background
+    color sky = #87ceeb;
+    color green1 = #98FB98; //bushes
+    color green2 = #90EE90; //bushes
+  //fruit
+    //fruit 1 (apple)
+      //color
+        color apple = #C7372F;
+        color appleStem = #8B4513;
+      //dimension
+        float x1 = random (10, 630); //x-coordinate of center
+        float y1 = random (-50, -10); //y-coordinate of center
+        float s1 = 0; //speed of y
+        float r1 = 10; //radius
+        float speedChange1 = 0; //counts # of times fruit moves in basket --> ensure fruit moves at proper speed when resumed
+    //fruit 2 (blueberry)
+      color blueberry = #0000CD;
+      //dimension
+        float x2 = random (5, 635); //x-coordinate of center
+        float y2 = random (-25, -5); //y-coordinate of center
+        float s2 = 0; //speed of y
+        float r2 = 5; //radius
+        float speedChange2 = 0; //counts # of times fruit moves in basket --> ensure fruit moves at proper speed when resumed
+    //fruit 3 (orange)
+      color orange = #FF8C00;
+      //dimension
+        float x3 = random (15, 625); //x-coordinate of  center
+        float y3 = random (-75, -15); //y-coordinate of center
+        float s3 = 0; //speed of y
+        float r3 = 15; //radius
+        float speedChange3 = 0; //counts # of times fruit moves in basket --> ensure fruit moves at proper speed when resumed
+    //fruit 4 (watermelon)
+      //color
+        color watermelon = #FF476F;
+        color watermelonSkin = #75b855;
+      //dimension 
+        float x4 = random (25, 615); //x-coordinate of center
+        float y4 = random (-100, -20); //y-coordinate of center
+        float w4 = 25; //width of watermelon
+        float h4 = 20; //height of watermelon
+        float s4 = 0; //speed of y
+        float speedChange4 = 0; //counts # of times fruit moves in basket --> ensure fruit moves at proper speed when resumed
+    //fruit 5 (toxic)
+      color toxic = #FFFFFF;
+        //dimension
+          float x5 = random (20, 620); //x-coordinate of center
+          float y5 = random (-100, -20); //y-coordinate of center
+          float r5 = 20; //radius
+          float s5 = 0; //speed of y
+          float speedChange5 = 0; //counts # of times fruit moves in basket --> ensure fruit moves at proper speed when resumed
+    //basket
+      color basket = #b79f8d;
+        //dimension
+          float x6 = 282.5; //x-coordinate of top left corner
+          float y6 = 435; //y-coordinate of top left corner
+          boolean basketMove = false;
+  //lives
+    int lives = 3;
+  //scoring
+    float scoring = 0; //total score
+    float scoringApple = 2; //score when apple in basket
+    float scoringBlueberry = 1; //score when blueberry in basket
+    float scoringOrange = 5; //score when orange in basket
+    float scoringWatermelon = 10; //score when watermelon to basket
+    float scoringToxic = -5; //score when toxic in basket
+  //buttons
+    float ButtonX = 220; //x-coordinate of top left corner of start and how to play buttons
+    float StartButtonY = 60; //y-coordinate of top left corner of start button
+    float HowButtonY = 220; //y-coordinate of top left corner of how to play button
+    float ButtonW = 200; //width of start and how to play buttons
+    float ButtonH = 100; //height of start and how to play buttons
+    boolean HowButton = true; //used to print text only once
+  //pause
+    boolean pause = false; //used to stop variables when true
+    float pauseX = -50; //x-coordinate of pause and resume buttons
+    boolean resume = false; //used to resume the variables/fruits/basket
+
+void setup () {
+  size (640, 480);
+}
+
+void draw () {
+  //background
+    background (sky);
+    
+    //bushes
+      fill (green2);
+        beginShape ();
+          curveVertex (90, height);
+          curveVertex (90, height);
+          curveVertex (60, 460);
+          curveVertex (70, 450);
+          curveVertex (60, 410);
+          curveVertex (90, 400);
+          curveVertex (80, 360);
+          curveVertex (100, 340);
+          curveVertex (120, 330);
+          curveVertex (140, 350);
+          curveVertex (160, 370);
+          curveVertex (150, 400);
+          curveVertex (170, 430);
+          curveVertex (150, 440);
+          curveVertex (200, 450);
+          curveVertex (180, 460);
+          curveVertex (200, 490);
+          curveVertex (190, height);
+          curveVertex (190, height);
+        endShape (CLOSE);
+      fill (green1);
+        beginShape ();
+          curveVertex (0, 400);
+          curveVertex (0, 400);
+          curveVertex (20, 360);
+          curveVertex (40, 390);
+          curveVertex (70, 380);
+          curveVertex (70, 410);
+          curveVertex (90, 430);
+          curveVertex (60, 450);
+          curveVertex (70, 470);
+          curveVertex (50, height);
+          curveVertex (0, height);
+          curveVertex (0, height);
+        endShape (CLOSE);
+        
+        beginShape();
+          curveVertex (240, height);
+          curveVertex (240, height);
+          curveVertex (220, 470);
+          curveVertex (230, 460);
+          curveVertex (220, 440);
+          curveVertex (240, 450);
+          curveVertex (230, 420);
+          curveVertex (250, 430);
+          curveVertex (240, 400);
+          curveVertex (260, 380);
+          curveVertex (270, 400);
+          curveVertex (290, 410);
+          curveVertex (280, 420);
+          curveVertex (300, 420);
+          curveVertex (290, 430);
+          curveVertex (300, 450);
+          curveVertex (290, 460);
+          curveVertex (300, height);
+          curveVertex (300, height);
+        endShape (CLOSE);
+      fill (green2);
+        beginShape();
+          curveVertex (430, height);
+          curveVertex (430, height);
+          curveVertex (410, 460);
+          curveVertex (440, 440);
+          curveVertex (420, 420);
+          curveVertex (440, 420);
+          curveVertex (430, 390);
+          curveVertex (450, 370);
+          curveVertex (480, 360);
+          curveVertex (510, 380);
+          curveVertex (530, 410);
+          curveVertex (510, 430);
+          curveVertex (550, 450);
+          curveVertex (540, 470);
+          curveVertex (530, height);
+          curveVertex (530, height);
+        endShape (CLOSE);
+
+        beginShape ();
+          curveVertex (280, height);
+          curveVertex (280, height);
+          curveVertex (290, 450);
+          curveVertex (300, 460);
+          curveVertex (320, 470);
+          curveVertex (310, height);
+          curveVertex (310, height);
+        endShape (CLOSE);
+      fill (green1);
+        beginShape();
+          curveVertex (310, height);
+          curveVertex (310, height);
+          curveVertex (330, 460);
+          curveVertex (310, 450);
+          curveVertex (340, 460);
+          curveVertex (320, 430);
+          curveVertex (350, 450);
+          curveVertex (330, 410);
+          curveVertex (360, 430);
+          curveVertex (340, 400);
+          curveVertex (360, 420);
+          curveVertex (350, 390);
+          curveVertex (370, 410);
+          curveVertex (360, 380);
+          curveVertex (380, 400);
+          curveVertex (390, 380);
+          curveVertex (390, 400);
+          curveVertex (410, 390);
+          curveVertex (400, 410);
+          curveVertex (420, 420);
+          curveVertex (390, 430);
+          curveVertex (430, 430);
+          curveVertex (400, 450);
+          curveVertex (420, 440);
+          curveVertex (410, 460);
+          curveVertex (440, 450);
+          curveVertex (430, 470);
+          curveVertex (420, height);
+          curveVertex (420, height);
+        endShape (CLOSE);
+
+  //button
+    //start
+      //shape
+        fill (#ffffff, 0);
+        rect (ButtonX, StartButtonY, ButtonW, ButtonH);
+      //text
+        textAlign (CENTER);
+        fill (#000000);
+        textSize(30);
+        text ("Start!", (ButtonX+ButtonW/2), (StartButtonY+ButtonH/2));
+      //when hovering
+        if (mouseX >= ButtonX && mouseX <= ButtonX+ButtonW && mouseY >= StartButtonY && mouseY <= StartButtonY+ButtonH) { //mouse is in start button
+          fill (#ffffff); //make rect white
+          rect (ButtonX, StartButtonY, ButtonW, ButtonH);
+          textAlign (CENTER);
+          fill (#000000);
+          textSize(30);
+          text ("Start!", (ButtonX+ButtonW/2), (StartButtonY+ButtonH/2));
+        }
+    //title
+      text ("Fruit Catcher", (ButtonX+ButtonW/2), 30);
+    //how to play
+      //shape
+        fill (#ffffff, 0);
+        rect (ButtonX, HowButtonY, ButtonW, ButtonH);
+      //text
+        fill (#000000);
+        text ("How to Play", (ButtonX+ButtonW/2), (HowButtonY+ButtonH/2));
+      //when hovering
+        if (mouseX >= ButtonX && mouseX <= (ButtonX+ButtonW) && mouseY >= HowButtonY && mouseY <= (HowButtonY+ButtonH)) { //mouse is in how to play button
+          fill (#ffffff);
+          rect (ButtonX, HowButtonY, ButtonW, ButtonH);
+          fill (#000000);
+          text ("How to Play", (ButtonX+ButtonW/2), (HowButtonY+ButtonH/2));
+        }
+      //click
+        if (mousePressed == true) {
+          if (mouseX >= ButtonX && mouseX <= ButtonX+ButtonW && mouseY >= StartButtonY && mouseY <= StartButtonY+ButtonH) { //player clicks start button
+            ButtonX = width; //move buttons off screen
+            //start speeds of fruits
+              s1 = 0.75;
+              s2 = 1;
+              s3 = 0.5;
+              s4 = 0.25;
+              s5 = 2;
+            pauseX = 0; //move pause button on screen
+            basketMove = true; //basket can move
+          }
+          if (mouseX >= ButtonX && mouseX <= (ButtonX+ButtonW) && mouseY >= HowButtonY && mouseY <= (HowButtonY+ButtonH)) { //player clicks how to play button
+            //text for player to check console
+              textSize (15);
+              textAlign (CENTER);
+              text ("Check the console for instructions", ButtonX, HowButtonY+55, ButtonW, ButtonH);
+            if (HowButton == true) { //printing instructions
+              println ("How to Play:");
+              println ("In this game, attempt to catch the falling fruit by moving the basket left and right by using the left and right arrows on the keyboard, respectively. If the basket goes off the screen, it will reappear on the opposite side.");
+              println ("Since this is a one-player game, the player can hold down on the keys to move the basket faster.");
+              println ("  ");
+              println ("There are 4 fruit to catch; blueberry (1 point), apple (2 points), orange (5 points), and watermelon (10 points).");
+              println ("If the player doesn't catch a fruit, they will lose 1 life (the player starts with 3 lives). A player can also lose a life if they catch the toxic fruit (white). If the player catches the toxic fruit, they will also lose 5 points. The game ends when the player has 0 lives left.");
+              println ("Try to get to 100 points and challenge yourself to get higher!");
+              println ("  ");
+              println ("Enjoy!");
+              HowButton = false; //ensure instructions print only once
+            } //end of HowButton == true
+          } //end of if player clicks how to play button
+        } //end of mousePressed == true
+  //fruits missed
+    //apple
+      //fruit
+        fill (apple);
+        ellipse (x1, y1, r1*2, r1*2);
+      //stem
+        fill (appleStem);
+        strokeWeight (2);
+        line (x1, y1-r1+2, x1+5, y1-r1-7); //make sure it's near the apple
+        y1 = y1 + s1; //move apple
+        if (y1 >= height + r1) { //apple moves off screen
+          x1 = random (10, 630); //apple resets position
+          y1 = random (-50, -10); //apple moves to top
+          lives = lives - 1; //reduce lives
+        }
+      strokeWeight (1); //reset strokeWeight
+      
+    //blueberry
+      //fruit
+        fill (blueberry);
+        ellipse (x2, y2, r2*2, r2*2);
+      y2 = y2 + s2; //move fruit
+      if (y2 >= height+r2) { //fruit moves off screen
+        x2 = random (5, 635); //reset position of fruit
+        y2 = random (-25, -5); //fruit moves to top of screen
+        lives = lives - 1; //reduce lives
+      }
+    //orange
+      //fruit
+        fill (orange);
+        ellipse (x3, y3, r3*2, r3*2);
+      y3 = y3 + s3; //move fruit
+      if (y3 >= height+r3) { //fruit moves off screen
+        x3 = random (15, 625); //reset fruit position
+        y3 = random (-75, -15); //fruit moves to top of screen
+        lives = lives - 1; //reduce lives
+      }
+    //watermelon
+      //skin
+        fill (watermelonSkin);
+        arc (x4, y4, w4*2, h4*2, radians (0), radians (180), CHORD);
+      //fruit
+        fill (watermelon);
+        arc (x4, y4, (w4-5)*2, (h4-5)*2, radians (0), radians (180), CHORD);
+      y4 = y4 + s4; //move fruit
+      if (y4 >= height+h4) { //fruit moves off screen
+        x4 = random (25, 615); //reset fruit position
+        y4 = random (-100, -20); //fruit moves to top of screen
+        lives = lives - 1; //reduce lives
+      }
+    //toxic
+      //fruit
+        fill (toxic);
+        ellipse (x5, y5, r5*2, r5*2);
+      y5 = y5 + s5; //move fruit
+      if (y5 >= height+r5) { //fruit moves off screen
+        x5 = random (20, 620); //reset fruit position
+        y5 = random (-100, -20); //fruit moves to top of screen
+      }
+  //basket
+    //basket
+      fill (basket, 250);
+      quad (x6, y6, x6+75, y6, x6+60, y6+40, x6+15, y6+40);
+    //handle
+      fill (basket, 191);
+        arc (x6+37.5, y6, 55, 35, radians (180), radians (360));
+      fill (basket, 127);
+        arc (x6+37.5, y6, 45, 25, radians (180), radians (360));
+  //scoring text
+    textAlign (LEFT);
+    textSize (30);
+    fill (#000000);
+    text ("Score: " + scoring, 0, 30);
+  //lives text
+    textAlign (RIGHT);
+    text ("Lives: " + lives, width, 30);
+  //game over text
+    if (lives == 0) {
+      textAlign (CENTER);
+      text ("GAME OVER.", width/2, height/2);
+      noLoop(); //end game
+    }
+  //best fruit catcher
+    if (scoring >= 100) { 
+      textAlign (CENTER);
+      textSize (15);
+      text ("You are the best fruit catcher.", width/2, 30);
+    } //no endLoop so player can keep on playing
+    
+  //fruit caught
+    //apple
+      if ((x1 >= x6) && (x1 <= (x6+75)) && (y1 >= y6) && ((y1 <= (y6+40)))) { //apple touches fruit basket
+        x1 = random (10, 630); //reset position of fruit
+        y1 = random (-50, -10); //fruit moves to top of screen 
+        s1 = s1*1.05; //increase fruit speed
+        scoring = scoring + scoringApple; //increase score by fruit
+        speedChange1 = speedChange1 + 1; //keep track of # of times fruit goes in basket (used when game is paused)
+      }
+    //blueberry
+      if ((x2 >= x6) && (x2 <= (x6+75)) && (y2 >= y6) && ((y2 <= (y6+40)))) { //blueberry touches fruit basket
+        x2 = random (5, 635); //reset fruit position
+        y2 = random (-25, -5); //fruit moves to top of screen
+        s2 = s2*1.05; //increase fruit speed
+        scoring = scoring + scoringBlueberry; //increase score by fruit
+        speedChange2 = speedChange2 + 1; //keep track of # of times fruit goes in basket (used when game is paused)
+      }
+    //orange
+      if ((x3 >= x6) && (x3 <= (x6+75)) && (y3 >= y6) && ((y3 <= (y6+40)))) { //orange touches fruit basket
+        x3 = random (15, 625); //reset fruit position
+        y3 = random (-75, -15); //fruit moves to top of screen
+        s3 = s3*1.05; //increase fruit speed
+        scoring = scoring + scoringOrange; //increase score by fruit
+        speedChange3 = speedChange3 + 1; //keep track of # of times fruit goes in basket (used when game is paused)
+      }
+    //watermelon
+      if ((x4 >= x6) && (x4 <= (x6+75)) && (y4 >= y6) && ((y4 <= (y6+40)))) { //watermelon touches fruit basket
+        x4 = random (25, 615); //reset fruit position
+        y4 = random (-100, -20); //fruit moves to top of screen
+        s4 = s4*1.05; //increase fruit speed
+        scoring = scoring + scoringWatermelon; //increase score by fruit
+        speedChange4 = speedChange4 + 1; //keep track of # of times fruit goes in basket (used when game is paused)
+      }
+    //toxic
+      if ((x5 >= x6) && (x5 <= (x6+75)) && (y5 >= y6) && ((y5 <= (y6+40)))) { //toxic touches fruit basket
+        x5 = random (20, 620); //reset fruit position
+        y5 = random (-100, -20); //fruit moves to top of screen
+        s5 = s5*1.1; //increase fruit speed
+        lives = lives - 1; //reduce lives by 1
+        scoring = scoring + scoringToxic; //increase score by fruit (since scoringToxic is -5, the score will reduce)
+        speedChange5 = speedChange5 + 1; //keep track of # of times fruit goes in basket (used when game is paused)
+      }
+  //pause
+    //button
+      fill (#ffffff, 0);
+      rect (pauseX, 35, 45, 30);
+    //text
+      textSize (15);
+      textAlign (CORNER);
+      fill (#000000);
+      text ("Pause", pauseX, 55);
+    //hovering on button
+      if ((mouseX >= pauseX) && (mouseX <= (pauseX+45)) && (mouseY >= 35) && (mouseY <=65)){ //mouse touches pause button
+        fill (#ffffff); //button turns white
+          rect (pauseX, 35, 45, 30);
+        fill (#000000);
+          text ("Pause", pauseX, 55);
+        //click on button
+          if (mousePressed == true){ //player clicks on pause button
+            pause = true; //activate pause feature
+          }
+      }
+      if (pause == true){
+        //resume button
+          fill (#ffffff, 0);
+          rect (pauseX, 65, 60, 30);
+          //text
+            fill (#000000);
+            text ("Resume", pauseX, 85);
+        //translucent layer over whole canvas
+          fill (#ffffff, 128);
+          rect (0, 0, width, height);
+        //stop fruit
+          s1 = 0;
+          s2 = 0;
+          s3 = 0;
+          s4 = 0;
+          s5 = 0;
+        //text to unpause game
+          fill (#000000);
+          textAlign (CENTER);
+          textSize (30);
+          text ("Click 'resume' to un-pause the game.", width/2, height/2);
+        if ((mouseX >= pauseX) && (mouseX <= (pauseX+60)) && (mouseY >= 65) && (mouseY <= 95)){ //hovering over resume
+          //button
+            fill (#ffffff); //button turns white
+            textAlign (LEFT);
+            rect (pauseX, 65, 60, 30);
+          //text
+            fill (#000000);
+            textSize (15);
+            text ("Resume", pauseX, 85);
+          if (mousePressed == true) { //resume clicked
+            resume = true; //resume activated
+            pause = false; //pause deactivated
+          } // end of if (mousePressed == true)
+        } // end of resume button hovering
+      } //end of if (pause == true)
+      if (resume == true) {
+        pause = false; //end white layer + text to un-pause game
+        //resume speed
+          s1 = (0.75 * pow (1.05, speedChange1)); //finding # of times fruit moves into basket and using that as the exponent to the increase in speed (1.05^speedChange1) and multiplying the integer by the initial speed (0.75)
+          s2 = (1 * pow (1.05, speedChange2)); //finding # of times fruit moves into basket and using that as the exponent to the increase in speed (1.05^speedChange2) and multiplying the integer by the initial speed (1)
+          s3 = (0.5 * pow (1.05, speedChange3)); //finding # of times fruit moves into basket and using that as the exponent to the increase in speed (1.05^speedChange3) and multiplying the integer by the initial speed (0.5)
+          s4 = (0.25 * pow (1.05, speedChange4)); //finding # of times fruit moves into basket and using that as the exponent to the increase in speed (1.05^speedChange4) and multiplying the integer by the initial speed (0.25)
+          s5 = (2 * pow (1.1, speedChange5)); //finding # of times fruit moves into basket and using that as the exponent to the increase in speed (1.1^speedChange5) and multiplying the integer by the initial speed (2)
+        resume = false; //deactivate resume so fruits don't keep on increasing in speed
+      }
+}
+
+void keyPressed () {
+  //movement
+    if ((key == CODED) && (keyCode == LEFT) && (pause == false) && (basketMove == true)) { //if left arrow pressed and pause not activated
+      x6 = x6-15; //basket moves left
+    }
+    if ((key == CODED) && (keyCode == RIGHT) && (pause == false) && (basketMove == true)) { //if right arrow pressed and pause not activated 
+      x6 = x6+15; //basket moves right
+    }
+    if (x6 >= 640) { //if basket moves off screen to the right
+      x6 = -74; //basket reappears to left of screen
+    }
+    if (x6 <= -75) { //if basket moves off screen to the left
+      x6 = 639; //basket reappears to right of screen
+    }
+}
